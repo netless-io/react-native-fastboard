@@ -1,7 +1,7 @@
 {
-  "name": "react-native-fastboard",
-  "version": "0.1.0",
-  "description": "test",
+  "name": "@netless/react-native-fastboard",
+  "version": "0.0.1",
+  "description": "interactive whiteboard with user interface for react-native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/index.d.ts",
@@ -54,7 +54,6 @@
     "@types/jest": "^28.1.2",
     "@types/react": "~17.0.21",
     "@types/react-native": "0.68.0",
-    "commitlint": "^17.0.2",
     "eslint": "^8.4.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -70,9 +69,17 @@
   "resolutions": {
     "@types/react": "17.0.21"
   },
+  "dependencies": {
+    "@miblanchard/react-native-slider": "^2.1.0",
+    "@netless/react-native-whiteboard": "^0.0.14",
+    "react-native-uuid": "^2.0.1",
+    "zustand": "^4.0.0-rc.1"
+  },
   "peerDependencies": {
+    "@netless/react-native-whiteboard": "^0.0.14",
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-webview": "^11.22.2"
   },
   "jest": {
     "preset": "react-native",

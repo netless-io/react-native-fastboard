@@ -1,24 +1,34 @@
-# react-native-fastboard
+# @netless/react-native-fastboard
+
 Interactive whiteboard with user interface
+
 ## Installation
 
 ```sh
-npm install react-native-fastboard
+npm install --save @netless/react-native-fastboard @netless/react-native-whiteboard react-native-webview
 ```
 
 ## Usage
 
-```js
-import { multiply } from "react-native-fastboard";
+``` ts
+import { FastRoom } from '@netless/react-native-fastboard';
 
-// ...
-
-const result = await multiply(3, 7);
+<FastRoom  
+    sdkParams={{
+        appIdentifier: "whiteboard-appid",
+        region: "us-sv", // "cn-hz" | "us-sv" | "sg" | "in-mum" | "gb-lon"
+    }}
+    roomParams={{
+        uid: "unique_id_for_each_client",
+        uuid: "room-uuid",
+        roomToken: "NETLESSROOM_...",
+    }}
+/>
 ```
 
 ## Contributing
 
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+Suggest to submit pr or issue.
 
 ## License
 
