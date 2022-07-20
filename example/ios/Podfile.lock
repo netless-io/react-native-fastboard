@@ -302,7 +302,7 @@ PODS:
     - glog
   - react-native-webview (11.22.7):
     - React-Core
-  - react-native-whiteboard (0.0.13):
+  - react-native-whiteboard (0.0.14):
     - React-Core
   - React-perflogger (0.68.2)
   - React-RCTActionSheet (0.68.2):
@@ -560,7 +560,7 @@ SPEC CHECKSUMS:
   React-jsinspector: c5989c77cb89ae6a69561095a61cce56a44ae8e8
   React-logger: a0833912d93b36b791b7a521672d8ee89107aff1
   react-native-webview: 227ba9205abb8579116b69ea5774d9744267c65a
-  react-native-whiteboard: 284b5a916814f652170bfea4e29e095612641486
+  react-native-whiteboard: d56d2ffa0392b8572bfc613954845e48c6dfd38e
   React-perflogger: a18b4f0bd933b8b24ecf9f3c54f9bf65180f3fe6
   React-RCTActionSheet: 547fe42fdb4b6089598d79f8e1d855d7c23e2162
   React-RCTAnimation: bc9440a1c37b06ae9ebbb532d244f607805c6034

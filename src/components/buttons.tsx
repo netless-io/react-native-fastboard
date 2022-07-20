@@ -12,14 +12,13 @@ import { branColor } from '../whiteboardConfig';
 
 export function CompactColorButton(props: {color: string, onPress: () => void}) {
   return <TouchableOpacity
-  onPress={props.onPress}
-  style={{
-    borderRadius: 4,
-    aspectRatio: 1,
-    padding: 12,
-    height: 44
-  }}>
-  <View style={{ backgroundColor: props.color, width: '100%', height: '100%', borderRadius: 4 }} />
+    onPress={props.onPress}
+    style={{
+      padding: 12,
+      height: 44
+    }}
+    >
+    <View style={{ backgroundColor: props.color, width: '100%', height: '100%', aspectRatio: 1, borderRadius: 4, alignSelf: 'center' }} />
   </TouchableOpacity>
 }
 

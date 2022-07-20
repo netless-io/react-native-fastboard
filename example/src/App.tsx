@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { Button, Dimensions, StyleSheet, View } from 'react-native';
 import { appIdentifier, roomToken, uid, userPayload, uuid } from './roomConst';
-import { FastRoom, FastRoomObject, RoomCallbackHandler, RoomConfig, SDKConfig } from 'react-native-fastboard';
-import type { DocumentPage } from 'lib/typescript';
+import { DocumentPage, FastRoom, FastRoomObject, RoomCallbackHandler, RoomConfig, SDKConfig } from '@netless/react-native-fastboard';
 
 let fastRoomObj: FastRoomObject | undefined;
-const sdkParams: SDKConfig = {appIdentifier, region: 'cn-hz', log: true};
-const roomParams: RoomConfig = {uuid, uid, roomToken, userPayload};
+const sdkParams: SDKConfig = { appIdentifier, region: 'cn-hz', log: true };
+const roomParams: RoomConfig = { uuid, uid, roomToken, userPayload };
 const roomCallback: Partial<RoomCallbackHandler> = {
   onPhaseChanged: e => console.log('phase changed log, ', e)
 }
@@ -40,38 +39,80 @@ const examplePptPage: DocumentPage = {
 }
 
 export default function App() {
+  const [usingCustomDesign, setUsingCustomDesign] = React.useState(false);
+
   return (
     <View style={styles.container}>
       <FastRoom
-        sdkParams={sdkParams} 
-        roomParams={roomParams} 
-        style={{container: styles.fastRoomContainer}} 
-        joinRoomSuccessCallback={(obj)=>fastRoomObj=obj}
+        sdkParams={sdkParams}
+        roomParams={roomParams}
+        style={
+          usingCustomDesign ?
+            {
+              container: styles.fastRoomContainer,
+              controlBar: customStyles.controlBar,
+              horizontalControlBar: customStyles.horizontalControlBar,
+              subPanel: customStyles.subPanel,
+              compactPanel: customStyles.compactPanel,
+              applianceSelectedColor: '#ff3838',
+              regularPanel: customStyles.regularPanel,
+            } :
+            {
+              container: styles.fastRoomContainer,
+            }
+        }
+        displayConfig={usingCustomDesign ? {
+          showApplianceTools: true,
+          showRedoUndo: true,
+          showPageIndicator: false
+        } : undefined}
+        joinRoomSuccessCallback={(obj) => fastRoomObj = obj}
         roomCallback={roomCallback}
       />
 
       <View style={styles.operationContainer}>
-        <Button title='Add image' onPress={()=>fastRoomObj.insertImage(exampleImage, {width: 144, height: 144})}/>
-        <Button title='Add Video' onPress={()=>fastRoomObj.insertMedia(exampleMp4, 'example video')}/>
-        <Button title='Add Music' onPress={()=>fastRoomObj.insertMedia(exampleMp3, 'example music')}/>
-        <Button title='Add word'  onPress={()=>fastRoomObj.insertStaticDocument([exampleDocPage], 'Hello docs')}/>
-        <Button title='Add pdf'   onPress={()=>fastRoomObj.insertStaticDocument([examplePdfPage], 'Hello pdf')}/>
-        <Button title='Add dynamic ppt' onPress={()=>fastRoomObj.insertSlide('017909fcab64419bae1b3099b6f1dd7c', 'https://convertcdn.netless.link/dynamicConvert', '开始使用 Flat.pptx')}/>
-        <Button title='Add static ppt' onPress={()=>fastRoomObj.insertStaticDocument([examplePptPage], 'Hello ppt')}/>
+        <Button title='Add image' onPress={() => fastRoomObj.insertImage(exampleImage, { width: 144, height: 144 })} />
+        <Button title='Add Video' onPress={() => fastRoomObj.insertMedia(exampleMp4, 'example video')} />
+        <Button title='Add Music' onPress={() => fastRoomObj.insertMedia(exampleMp3, 'example music')} />
+        <Button title='Add word' onPress={() => fastRoomObj.insertStaticDocument([exampleDocPage], 'Hello docs')} />
+        <Button title='Add pdf' onPress={() => fastRoomObj.insertStaticDocument([examplePdfPage], 'Hello pdf')} />
+        <Button title='Add dynamic ppt' onPress={() => fastRoomObj.insertSlide('017909fcab64419bae1b3099b6f1dd7c', 'https://convertcdn.netless.link/dynamicConvert', '开始使用 Flat.pptx')} />
+        <Button title='Add static ppt' onPress={() => fastRoomObj.insertStaticDocument([examplePptPage], 'Hello ppt')} />
+        <Button title='Custom Design' onPress={() => setUsingCustomDesign(!usingCustomDesign)} />
       </View>
     </View>
   );
 }
 
+const customStyles = StyleSheet.create({
+  controlBar: {
+    backgroundColor: '#ffb8b8',
+    width: 66
+  },
+  horizontalControlBar: {
+    backgroundColor: '#ffb8b8'
+  },
+  subPanel: {
+    backgroundColor: '#fffa65'
+  },
+  regularPanel: {
+    flexDirection: 'row-reverse'
+  },
+  compactPanel: {
+    flexDirection: 'row-reverse'
+  }
+});
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: isPad ? 'column' : 'row',
     alignItems: isPad ? 'center' : 'flex-start',
     backgroundColor: 'yellow'
   },
   fastRoomContainer: {
     marginTop: 44,
-    width: isPad ? '98%' : '70%',
+    width: isPad ? '98%' : '60%',
     aspectRatio: 1.777777777
   },
   operationContainer: {
@@ -79,6 +120,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignSelf: 'flex-start',
+    flexWrap: 'wrap',
   }
 });
 

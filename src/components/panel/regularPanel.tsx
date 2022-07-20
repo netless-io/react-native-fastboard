@@ -36,6 +36,10 @@ type RegularPanelProps = {
     currentShape: ApplianceShape
     currentTextColor: string
 
+    showApplianceTools: boolean
+    showRedoUndo: boolean
+    showPageIndicator: boolean
+
     memorizedShapeAppliancePair: AppliancePair
 
     room: Room
@@ -44,11 +48,11 @@ type RegularPanelProps = {
 
 export function RegularPanel(props: RegularPanelProps) {
     const { currentTextColor, showShapePanel, showDelete, showPencilAdjustPanel, showTextAdjustPanel, undoDisable, redoDisable, prePageDisable, nextPageDisable, pageValue, strokeWidth, currentStrokeColor, currentAppliance, currentShape, memorizedShapeAppliancePair, room, wbStore } = props;
-    return (<SafeAreaView style={{position: 'absolute', width: '100%', height: '100%', flexDirection: 'row', alignItems: 'flex-end'}} pointerEvents={'box-none'}>
-        <View style={{ alignSelf: 'center' }}>
+    return (<SafeAreaView style={styles.regularPanel} pointerEvents={'box-none'}>
+        {props.showApplianceTools && <View style={{ alignSelf: 'center' }}>
             {showDelete &&
                 <View style={{ ...styles.controlBar, position: 'absolute', left: 0, top: -54 }}>
-                    <ExecutionButton image={imageSources.delete} tintColor={"#ff0000"} onPress={room.delete} />
+                    <ExecutionButton image={imageSources.delete} tintColor={"#ff0000"} onPress={room.delete} width={'100%'} />
                 </View>}
 
             <View style={{ ...styles.controlBar, alignSelf: 'center' }}>
@@ -76,23 +80,23 @@ export function RegularPanel(props: RegularPanelProps) {
                     width={"100%"}
                     key={memorizedShapeAppliancePair.appliance + (memorizedShapeAppliancePair.shape ?? '')}
                 />
-                <ExecutionButton tintColor={'#5D5D5D'} image={imageSources.clean} onPress={() => room.cleanScene(true)} />
+                <ExecutionButton tintColor={'#5D5D5D'} image={imageSources.clean} onPress={() => room.cleanScene(true)} width={'100%'} />
             </View>
-        </View>
+        </View>}
 
-        <View style={{ ...styles.horizontalControlBar, left: 16, position: 'absolute'}}>
+        {props.showRedoUndo && <View style={{ ...styles.horizontalControlBar, left: 16, position: 'absolute'}}>
             <ExecutionButton image={imageSources.undo} disabled={undoDisable} onPress={room.undo} />
             <ExecutionButton image={imageSources.redo} disabled={redoDisable} onPress={room.redo} />
-        </View>
+        </View>}
 
-        <View style={{ left: 0, right: 0, position: 'absolute', justifyContent: 'center', alignItems: 'center' }} pointerEvents={'box-none'}>
+        {props.showPageIndicator && <View style={{ left: 0, right: 0, position: 'absolute', justifyContent: 'center', alignItems: 'center' }} pointerEvents={'box-none'}>
             <View style={styles.horizontalControlBar}>
                 <ExecutionButton image={imageSources.prev} disabled={prePageDisable} onPress={() => room.prevPage()} />
                 <Text style={{ alignSelf: 'center' }}>{pageValue}</Text>
                 <ExecutionButton image={imageSources.next} disabled={nextPageDisable} onPress={() => room.nextPage()} />
                 <ExecutionButton image={imageSources.whiteboardAdd} onPress={() => room.addPage({}).then(()=>room.nextPage())} />
             </View>
-        </View>
+        </View>}
 
         {showPencilAdjustPanel &&
             <View style={{...styles.subPanel, alignSelf: 'center'}}>

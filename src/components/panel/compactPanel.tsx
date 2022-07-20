@@ -24,6 +24,9 @@ type CompactPanelProps = {
     currentTextColor: string
     currentStrokeColor: string
     strokeWidth: number
+
+    showApplianceTools: boolean
+    showRedoUndo: boolean
     
     room: Room
     wbStore: PanelStateStoreInstance
@@ -41,30 +44,30 @@ const compactAppliance: AppliancePair[] = [
 
 export function CompactPanel(props: CompactPanelProps) {
     const { currentAppliance, currentShape, room, showCompactColorButton, showCompactSubToolPanel, showCompactColorSubPanel, showDelete, undoDisable, redoDisable, currentStrokeColor, wbStore, strokeWidth, currentTextColor } = props;
-    return (<SafeAreaView style={{position: 'absolute', width: '100%', height: '100%', flexDirection: 'row'}} pointerEvents={'box-none'}>
+    return (<SafeAreaView style={styles.compactPanel} pointerEvents={'box-none'}>
         <View style={{ flexDirection: 'column', justifyContent: 'center' }}>
-            {showCompactColorButton &&
+            {props.showApplianceTools && showCompactColorButton &&
                 <View style={styles.controlBar}>
                     <CompactColorButton color={currentStrokeColor} onPress={() => wbStore.getState().dispatch({ name: EventName.clickCompactColors })} />
                 </View>}
-            {showDelete &&
+            {props.showApplianceTools && showDelete &&
                 <View style={styles.controlBar}>
-                    <ExecutionButton image={imageSources.delete} tintColor={"#ff0000"} onPress={room.delete} />
+                    <ExecutionButton image={imageSources.delete} tintColor={"#ff0000"} onPress={room.delete} width={'100%'} />
                 </View>}
             {!showDelete && !showCompactColorButton && <View style={{ width: 44, height: 44 }} />}
-            <View style={{ ...styles.controlBar, marginTop: 6 }}>
+            {props.showApplianceTools && <View style={{ ...styles.controlBar, marginTop: 6 }}>
                 <ImageSelectableButton
                     image={imageSources[currentShape ?? currentAppliance]}
                     selected={true}
                     onPress={() => wbStore.getState().dispatch({ name: EventName.clickCompactTools })}
                     width={"100%"}
                 />
-            </View>
+            </View>}
 
-            <View style={{ ...styles.controlBar, marginTop: 6 }}>
-                <ExecutionButton image={imageSources.undo} disabled={undoDisable} onPress={room.undo} />
-                <ExecutionButton image={imageSources.redo} disabled={redoDisable} onPress={room.redo} />
-            </View>
+            { props.showRedoUndo && <View style={{ ...styles.controlBar, marginTop: 6 }}>
+                <ExecutionButton image={imageSources.undo} disabled={undoDisable} onPress={room.undo} width={'100%'} />
+                <ExecutionButton image={imageSources.redo} disabled={redoDisable} onPress={room.redo} width={'100%'} />
+            </View>}
         </View>
 
         {

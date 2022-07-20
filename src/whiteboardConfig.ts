@@ -13,7 +13,12 @@ export function isShape(appliance: Appliance) {
     }
 }
 
-export const branColor = '#3381ff';
+export function setBrandColor(c: string) {
+    branColor = c;
+}
+
+export const initBrandColor = '#3381ff';
+export let branColor = initBrandColor;
 export const defaultColors: string[] = [
     "#EC3455",
     "#F5AD46",

@@ -2,15 +2,28 @@ import React from "react";
 import { RoomConfig, SDK, WhiteboardView } from "@netless/react-native-whiteboard";
 import { View, Dimensions, StyleProp, ViewStyle } from "react-native";
 import { CompactPanel } from "./panel/compactPanel";
-import { styles } from "../styles/styles";
+import { basicStyles, styles } from "../styles/styles";
 import { RegularPanel } from "./panel/regularPanel";
 import { createPanelStateStore, EventName } from "../store/panelStateStore";
 import uuid from "react-native-uuid";
 import type { Room, RoomCallbackHandler, SDKCallbackHandler, SDKConfig } from "@netless/react-native-whiteboard";
+import { initBrandColor, setBrandColor } from "../whiteboardConfig";
+
+export type DisplayConfig = {
+    showApplianceTools: boolean
+    showRedoUndo: boolean
+    showPageIndicator: boolean
+}
 
 export type FastRoomStyle = {
     container?: StyleProp<ViewStyle>,
     fastRoom?: StyleProp<ViewStyle>
+    controlBar?: StyleProp<ViewStyle>
+    horizontalControlBar?: StyleProp<ViewStyle>
+    subPanel?: StyleProp<ViewStyle>
+    regularPanel?: StyleProp<ViewStyle>
+    compactPanel?: StyleProp<ViewStyle>
+    applianceSelectedColor?: string
 }
 
 export type DocumentPage = {
@@ -98,7 +111,8 @@ export type FastRoomProps = {
     joinRoomSuccessCallback?: (FastRoomObject) => void,  
     roomCallback?: Partial<RoomCallbackHandler>, 
     sdkCallback?: Partial<SDKCallbackHandler>, 
-    style?: FastRoomStyle | undefined
+    style?: FastRoomStyle,
+    displayConfig?: DisplayConfig
 }
 
 export function FastRoom(props: FastRoomProps) {
@@ -130,6 +144,15 @@ export function FastRoom(props: FastRoomProps) {
     const pageState = wbStore(s => s.pageState);
     const pageValue = `${pageState.index + 1} / ${pageState.length}`
 
+    let showApplianceTools = true;
+    let showRedoUndo = true;
+    let showPageIndicator = true;
+    if (props.displayConfig) {
+        showApplianceTools = props.displayConfig.showApplianceTools;
+        showRedoUndo = props.displayConfig.showRedoUndo;
+        showPageIndicator = props.displayConfig.showPageIndicator;
+    }
+
     const joinRoomCallback = React.useCallback((aRoom?: Room, sdk?: SDK, error?: Error) => {
         if (error) {
             console.log(error);
@@ -158,6 +181,26 @@ export function FastRoom(props: FastRoomProps) {
 
     if (props.roomParams.disableNewPencil == undefined) {
         props.roomParams.disableNewPencil = false;
+    }
+
+    const style = props.style;
+    if (style as FastRoomStyle) {
+        const controlBar = style.controlBar || {} as Object;
+        styles.controlBar = {...basicStyles.controlBar, ...controlBar};
+        const horizontalControlBar = style.horizontalControlBar || {} as Object;
+        styles.horizontalControlBar = {...basicStyles.horizontalControlBar, ...horizontalControlBar};
+        const subPanel = style.subPanel || {} as Object;
+        styles.subPanel = {...basicStyles.subPanel, ...subPanel};
+        const regularPanel = style.regularPanel || {} as Object;
+        styles.regularPanel = {...basicStyles.regularPanel, ...regularPanel};
+        const compactPanel = style.compactPanel || {} as Object;
+        styles.compactPanel = {...basicStyles.compactPanel, ...compactPanel};
+
+        if (style.applianceSelectedColor) {
+            setBrandColor(style.applianceSelectedColor);
+        } else {
+            setBrandColor(initBrandColor);
+        }
     }
 
     const roomCallbacks = React.useMemo(() => {
@@ -196,28 +239,33 @@ export function FastRoom(props: FastRoomProps) {
                     currentStrokeColor={currentStrokeColor}
                     strokeWidth={strokeWidth}
                     room={fastRoomObj.room}
-                    wbStore={wbStore} />
+                    wbStore={wbStore} 
+                    showApplianceTools={showApplianceTools} 
+                    showRedoUndo={showRedoUndo} />
             }
 
             {didInitialize && isPad &&
                 <RegularPanel
-                    currentTextColor={currentTextColor}
-                    showShapePanel={showShapePanel}
-                    showDelete={showDelete}
-                    showPencilAdjustPanel={showPencilAdjustPanel}
-                    showTextAdjustPanel={showTextAdjustPanel}
-                    undoDisable={undoDisable}
-                    redoDisable={redoDisable}
-                    prePageDisable={prePageDisable}
-                    nextPageDisable={nextPageDisable}
-                    pageValue={pageValue}
-                    strokeWidth={strokeWidth}
-                    currentStrokeColor={currentStrokeColor}
-                    currentAppliance={currentAppliance}
-                    currentShape={currentShape}
-                    memorizedShapeAppliancePair={memorizedShapeAppliancePair}
-                    room={fastRoomObj.room}
-                    wbStore={wbStore}
+                currentTextColor={currentTextColor}
+                showShapePanel={showShapePanel}
+                showDelete={showDelete}
+                showPencilAdjustPanel={showPencilAdjustPanel}
+                showTextAdjustPanel={showTextAdjustPanel}
+                undoDisable={undoDisable}
+                redoDisable={redoDisable}
+                prePageDisable={prePageDisable}
+                nextPageDisable={nextPageDisable}
+                pageValue={pageValue}
+                strokeWidth={strokeWidth}
+                currentStrokeColor={currentStrokeColor}
+                currentAppliance={currentAppliance}
+                currentShape={currentShape}
+                memorizedShapeAppliancePair={memorizedShapeAppliancePair}
+                room={fastRoomObj.room}
+                wbStore={wbStore} 
+                showApplianceTools={showApplianceTools} 
+                showRedoUndo={showRedoUndo} 
+                showPageIndicator={showPageIndicator}                
                 />
             }
         </View>
