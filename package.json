@@ -1,6 +1,6 @@
 {
   "name": "@netless/react-native-fastboard",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "interactive whiteboard with user interface for react-native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
